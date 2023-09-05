@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 //-------------------------------------------------------
 //não é necessário após o pg ser usado pelo menos uma vez
-import './database/database.js';
+import './database/database.connection.js';
 //-------------------------------------------------------
 import indexRouter from './routes/index.routes.js';
 

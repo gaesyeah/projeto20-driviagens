@@ -1,4 +1,4 @@
-import { db } from "../database/database.js";
+import { db } from "../database/database.connection.js";
 
 const create = (body) => {
   const { name } = body;
