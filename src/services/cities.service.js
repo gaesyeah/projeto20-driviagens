@@ -1,8 +1,8 @@
 import citiesRepository from "../repository/cities.repository.js";
 
-const addCity = (body) => {
-  return citiesRepository.insertCity(body);
+const create = (body) => {
+  return citiesRepository.create(body);
 };
 
-const citiesService = { addCity };
+const citiesService = { create };
 export default citiesService;
