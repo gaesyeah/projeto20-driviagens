@@ -1,4 +1,4 @@
-export const postFlight = async (req, res) => {
+export const create = async (req, res) => {
   try {
     res.send();
   } catch ({ message }) {
@@ -6,10 +6,13 @@ export const postFlight = async (req, res) => {
   }
 };
 
-export const getFlights = async (req, res) => {
+export const read = async (req, res) => {
   try {
     res.send();
   } catch ({ message }) {
     res.status(httpStatus.INTERNAL_SERVER_ERROR).send({ message });
   }
 };
+
+const flightsController = { create, read };
+export default flightsController;
