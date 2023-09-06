@@ -12,5 +12,9 @@ const create = (body) => {
   return flightsRepository.create(body);
 };
 
-const flightsService = { create };
+const read = (query) => {
+  return flightsRepository.read(query);
+}
+
+const flightsService = { create, read };
 export default flightsService;

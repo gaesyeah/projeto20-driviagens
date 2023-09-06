@@ -5,5 +5,22 @@ const create = ({ origin, destination, date }) => {
   , [origin, destination, date]);
 };
 
-const flightsRepository = { create };
+const read = (query) => {
+  const { origin, destination, 'bigger-date': biggerDate, 'smaller-date': smallerDate } = query;
+  console.log(origin, destination, biggerDate, smallerDate);
+  
+  return db.query(
+    `SELECT 
+      flights.id, 
+      origin.name AS origin, 
+      destination.name AS destination,
+      TO_CHAR(flights.date, 'DD-MM-YYYY') AS date
+    FROM flights
+      JOIN cities AS origin ON flights.origin = origin.id
+      JOIN cities AS destination ON flights.destination = destination.id
+    ORDER BY date;`
+  );
+};
+
+const flightsRepository = { create, read };
 export default flightsRepository;
