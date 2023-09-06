@@ -15,7 +15,9 @@ const create = (body) => {
 };
 
 const read = async (query) => {
-  const { origin, destination, 'bigger-date': biggerDate, 'smaller-date': smallerDate } = query;
+  const { origin, destination, 'bigger-date': biggerDate, 'smaller-date': smallerDate, page } = query;
+
+  if (page && page <= 0) throw error.badRequest('The query page cannot be equal or less than zero');
 
   if (biggerDate || smallerDate){
     if ((biggerDate && !smallerDate) || !biggerDate && smallerDate) throw error.unprocessableEntity('The two query dates are mandatory if at least one is specified');
@@ -29,7 +31,7 @@ const read = async (query) => {
     if (dayjs(smallerDate, "DD-MM-YYYY").isAfter(dayjs(biggerDate, "DD-MM-YYYY"))) throw error.badRequest('The bigger-date must be after the smaller-date');
   }
 
-  const flights = await flightsRepository.read(origin, destination, biggerDate, smallerDate);
+  const flights = await flightsRepository.read(origin, destination, biggerDate, smallerDate, page);
   if (destination && flights.rowCount === 0) throw error.notFound(`No flights found with the destination: ${destination}${origin ? ` and origin: ${origin}` : ''}`);
 
   return flights;

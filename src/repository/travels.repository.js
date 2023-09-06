@@ -5,9 +5,19 @@ const create = ({	passengerId, flightId}) => {
   , [passengerId, flightId]);
 };
 
-const read = ({ name }) => {
+const read = ({ name, page }) => {
+  const qtd = 10;
   let queryString = '';
-  if (name) queryString = `WHERE passengers."firstName" ILIKE '%${name}%' OR passengers."secondName" ILIKE '%${name}%'`;
+  const params = [];
+
+  if (page) {
+    params.push((page - 1) * qtd);
+  }
+  if (name) {
+    queryString = `WHERE passengers."firstName" ILIKE ${!page ? '$1' : '$2'} OR passengers."secondName" ILIKE ${!page ? '$1' : '$2'}`;
+    params.push(`%${name}%`);
+  };
+
   return db.query(
     `SELECT 
       CONCAT(passengers."firstName", ' ', passengers."secondName") AS passenger, 
@@ -17,7 +27,9 @@ const read = ({ name }) => {
       JOIN flights ON travels."flightId" = flights.id
     ${queryString}
       GROUP BY passengers.id
-      ORDER BY travels DESC, passengers.id;`
+      ORDER BY travels DESC, passengers.id
+    ${page ? `LIMIT ${qtd} OFFSET $1` : ''};`
+      ,params
   );
 };
 

@@ -6,6 +6,8 @@ const create = (body) => {
 };
 
 const read = async (query) => {
+  if (query.page && query.page <= 0) throw error.badRequest('The query page cannot be equal or less than zero');
+
   const travels = await travelsRepository.read(query);
   if (travels.rowCount > 10) throw error.internalServerError('Too many results');
 
