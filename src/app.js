@@ -1,6 +1,8 @@
 import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
+//necessário para o middleware de erros funcionar
+import "express-async-errors";
 //-------------------------------------------------------
 //não é necessário após o pg ser usado pelo menos uma vez
 import './database/database.connection.js';
