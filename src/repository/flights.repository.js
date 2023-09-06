@@ -5,10 +5,29 @@ const create = ({ origin, destination, date }) => {
   , [origin, destination, date]);
 };
 
-const read = (query) => {
-  const { origin, destination, 'bigger-date': biggerDate, 'smaller-date': smallerDate } = query;
-  console.log(origin, destination, biggerDate, smallerDate);
-  
+const read = (origin, destination, biggerDate, smallerDate) => {
+  let queryString = '';
+  const params = [];
+
+  if (origin) {
+    queryString += `WHERE origin.name = $1`;
+    params.push(origin);
+  };
+  if (destination) {
+    queryString += `${origin ? ' AND' : ' WHERE'} destination.name = ${origin ? '$2' : '$1'}`;
+    params.push(destination);
+  };
+  if (biggerDate || smallerDate) {
+    queryString += `
+      ${origin || destination ? ' AND' : ' WHERE'} 
+      flights.date BETWEEN ${
+        (origin && destination) ? "$3 AND $4" : 
+        (destination || origin) ? "$2 AND $3" : 
+        "$1 AND $2"
+    }`
+    params.push(smallerDate, biggerDate);
+  };
+
   return db.query(
     `SELECT 
       flights.id, 
@@ -18,7 +37,9 @@ const read = (query) => {
     FROM flights
       JOIN cities AS origin ON flights.origin = origin.id
       JOIN cities AS destination ON flights.destination = destination.id
-    ORDER BY date;`
+    ${queryString}
+    ORDER BY flights.date;`,
+      params
   );
 };
 

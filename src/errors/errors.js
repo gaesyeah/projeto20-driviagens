@@ -14,5 +14,19 @@ const internalServerError = (resource = 'Internal Server Error') => {
   }
 };
 
-const error = { unprocessableEntity, internalServerError };
+const notFound = (resource = 'Not Found') => {
+  return {
+    status: httpStatus.NOT_FOUND,
+    message: resource
+  }
+};
+
+const badRequest = (resource = 'Bad Request') => {
+  return {
+    status: httpStatus.BAD_REQUEST,
+    message: resource
+  }
+};
+
+const error = { unprocessableEntity, internalServerError, notFound, badRequest };
 export default error;
