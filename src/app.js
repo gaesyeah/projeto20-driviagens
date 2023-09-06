@@ -7,10 +7,12 @@ import "express-async-errors";
 //não é necessário após o pg ser usado pelo menos uma vez
 import './database/database.connection.js';
 //-------------------------------------------------------
+import { errorHandling } from './middlewares/errorHandling.middleware.js';
 import indexRouter from './routes/index.routes.js';
 
 const app = express();
 app.use(express.json(), cors(), indexRouter);
+app.use(errorHandling);
 
 dotenv.config();
 const { PORT } = process.env;

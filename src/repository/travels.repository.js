@@ -29,7 +29,7 @@ const read = ({ name, page }) => {
       GROUP BY passengers.id
       ORDER BY travels DESC, passengers.id
     ${page ? `LIMIT ${qtd} OFFSET $1` : ''};`
-      ,params
+      , params
   );
 };
 
