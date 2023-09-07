@@ -28,11 +28,14 @@ const read = async (query) => {
       }).validate({ biggerDate, smallerDate });
     if (result.error) throw error.unprocessableEntity("The date format must adhere to 'DD-MM-YYYY'");
   
+    dayjs.extend(customParseFormat);
     if (dayjs(smallerDate, "DD-MM-YYYY").isAfter(dayjs(biggerDate, "DD-MM-YYYY"))) throw error.badRequest('The bigger-date must be after the smaller-date');
   }
 
   const flights = await flightsRepository.read(origin, destination, biggerDate, smallerDate, page);
-  if (destination && flights.rowCount === 0) throw error.notFound(`No flights found with the destination: ${destination}${origin ? ` and origin: ${origin}` : ''}`);
+  if (destination && flights.rowCount === 0) {
+    throw error.notFound(`No flights found with the destination: ${destination}${origin ? ` and origin: ${origin}` : ''}${biggerDate || smallerDate ? ` with date between ${smallerDate} and ${biggerDate}` : ''}${page ? ` (on page: ${page})` : ''}`);
+  };
 
   return flights;
 }

@@ -10,9 +10,7 @@ const read = (origin, destination, biggerDate, smallerDate, page) => {
   let queryString = '';
   const params = [];
 
-  if (page) {
-    params.push((page - 1) * qtd);
-  }
+  if (page) params.push((page - 1) * qtd);
   if (origin) {
     queryString += `WHERE origin.name = $${!page ? 1 : 2}`;
     params.push(origin);
