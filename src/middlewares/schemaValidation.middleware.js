@@ -1,10 +1,10 @@
-import httpStatus from "http-status";
+import error from "../errors/errors.js";
 
 export const schemaValidation = (schema) => {
   return (req, res, next) => {
 
-    const { error } = schema.validate(req.body, { abortEarly: false });
-    if (error) return res.status(httpStatus.UNPROCESSABLE_ENTITY).send({ message: error.details.map(({ message }) => message) });
+    const result = schema.validate(req.body, { abortEarly: false });
+    if (result.error) throw error.unprocessableEntity(result.error.details.map(({ message }) => message));
 
     next();
   }
